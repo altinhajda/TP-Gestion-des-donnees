@@ -82,9 +82,23 @@
             color: green;
         }
 
+        .actions-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .actions-container form {
+            margin: 0;
+        }
+
+        .actions-container form:first-child {
+            margin-right: 10px;
+        }
+
         .actions {
             display: flex;
             gap: 10px;
+            margin-left: auto;
         }
 
         .actions button {
@@ -120,7 +134,7 @@
     <div class="container">
         <h1>Liste de mots</h1>
         <form action="/add" method="post">
-            <input type="text" name="francais" placeholder="Ajouter un mot en franÃ§ais">
+            <input type="text" name="francais" placeholder="Ajouter un mot en français">
             <input type="submit" value="Ajouter">
         </form>
         <ul>
@@ -129,7 +143,7 @@
                 <span class="mot">{{ mot.Francais }}</span>
                 <span class="traduction{% if mot.Anglais %} traduit{% endif %}">{{ mot.Anglais or 'Pas encore traduit'
                     }}</span>
-                <div class="actions">
+                <div class="actions-container">
                     <form action="/translate" method="post">
                         <input type="hidden" name="id" value="{{ mot.ID }}">
                         <button type="submit" class="translate-btn" {% if mot.Anglais %} disabled{% endif %}><i
