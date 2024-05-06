@@ -54,10 +54,18 @@ def translate():
     }
     body = [{'text': text}]
     response = requests.post(url, headers=headers, json=body)
-    translated_text = response.json()[0]['translations'][0]['text']
 
-    cursor.execute("UPDATE Vocabulaire SET Anglais=? WHERE ID=?", translated_text, id)
-    conn.commit()
+    if response.ok:
+        translation_data = response.json()
+        if translation_data and 'translations' in translation_data[0]:
+            translated_text = translation_data[0]['translations'][0]['text']
+            cursor.execute("UPDATE Vocabulaire SET Anglais=? WHERE ID=?", translated_text, id)
+            conn.commit()
+        else:
+            print("Translation data is missing or in unexpected format:", translation_data)
+    else:
+        print("Failed to translate text. HTTP status code:", response.status_code)
+
     cursor.close()
     conn.close()
     return redirect(url_for('index'))
