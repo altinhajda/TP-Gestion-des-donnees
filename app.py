@@ -10,8 +10,8 @@ app = Flask(__name__, template_folder='templates')
 conn_string = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:server-tpgestion.database.windows.net,1433;Database=db-gestion;Uid=user;Pwd=Password01;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 
 # Clés Azure Translator
-translator_key = "6b7b37f486834dae97faaab2e0d04392"
-endpoint = "https://tp-gestion-iaservice.cognitiveservices.azure.com"
+translator_key = "13bd2e5c30544d81af470009e8476f67"
+endpoint = "https://tp-gestion-translator.cognitiveservices.azure.com/"
 location = "switzerlandnorth"
 
 @app.route('/')
