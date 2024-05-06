@@ -11,7 +11,7 @@ conn_string = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:server-tpgestio
 
 # Clés Azure Translator
 translator_key = "13bd2e5c30544d81af470009e8476f67"
-endpoint = "https://tp-gestion-translator.cognitiveservices.azure.com/"
+endpoint = "https://api.cognitive.microsofttranslator.com"
 location = "switzerlandnorth"
 
 @app.route('/')
@@ -44,26 +44,33 @@ def translate():
     text = cursor.fetchone()[0]
 
     # Appel à Azure Translator
-    path = '/translate?api-version=3.0&from=fr&to=en'
+    path = '/translate'
     url = endpoint + path
+    
+    params = {
+        'api-version': '3.0',
+        'from': 'fr',
+        'to': 'en'
+    }
+    
     headers = {
         'Ocp-Apim-Subscription-Key': translator_key,
         'Ocp-Apim-Subscription-Region': location,
         'Content-type': 'application/json',
         'X-ClientTraceId': str(uuid.uuid4())
     }
-    body = [{'text': text}]
-    response = requests.post(url, headers=headers, json=body)
+    body = [{
+        'text': text
+        }]
+    response = requests.post(url, params=params, headers=headers, json=body)
 
-    if response.ok:
-        translation_data = response.json()
-        if translation_data and 'translations' in translation_data[0]:
-            translated_text = translation_data[0]['translations'][0]['text']
-            cursor.execute("UPDATE Vocabulaire SET Anglais=? WHERE ID=?", translated_text, id)
-            conn.commit()
-        else:
-            print("Translation data is missing or in unexpected format:", translation_data)
+    # Vérifier si la réponse est réussie
+    if response.status_code == 200:
+        translated_text = response.json()[0]['translations'][0]['text']
+        cursor.execute("UPDATE Vocabulaire SET Anglais=? WHERE ID=?", translated_text, id)
+        conn.commit()
     else:
+        # En cas d'erreur dans la traduction, imprimer le message d'erreur
         print("Failed to translate text. HTTP status code:", response.status_code)
 
     cursor.close()
