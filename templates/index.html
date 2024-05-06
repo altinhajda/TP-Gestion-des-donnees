@@ -3,6 +3,41 @@
 
 <head>
     <title>Vocabulaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mot {
+            flex: 1;
+        }
+
+        .traduire-btn {
+            margin-left: 10px;
+        }
+
+        .traduit {
+            color: green;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,10 +49,12 @@
     <ul>
         {% for mot in mots %}
         <li>
-            {{ mot.Francais }} - {{ mot.Anglais or 'Pas encore traduit' }}
+            <span class="mot">{{ mot.Francais }}</span>
+            <span class="traduction{% if mot.Anglais %} traduit{% endif %}">{{ mot.Anglais or 'Pas encore traduit'
+                }}</span>
             <form action="/translate" method="post" style="display: inline;">
                 <input type="hidden" name="id" value="{{ mot.ID }}">
-                <button type="submit">Traduire</button>
+                <button type="submit" class="traduire-btn" {% if mot.Anglais %} disabled{% endif %}>Traduire</button>
             </form>
             <form action="/delete" method="post" style="display: inline;">
                 <input type="hidden" name="id" value="{{ mot.ID }}">
