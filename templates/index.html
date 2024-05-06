@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vocabulaire</title>
+</head>
+
+<body>
+    <h1>Liste de mots</h1>
+    <form action="/add" method="post">
+        <input type="text" name="francais" placeholder="Ajouter un mot en français">
+        <button type="submit">Ajouter</button>
+    </form>
+    <ul>
+        {% for mot in mots %}
+        <li>
+            {{ mot.Francais }} - {{ mot.Anglais or 'Pas encore traduit' }}
+            <form action="/translate" method="post" style="display: inline;">
+                <input type="hidden" name="id" value="{{ mot.ID }}">
+                <button type="submit">Traduire</button>
+            </form>
+            <form action="/delete" method="post" style="display: inline;">
+                <input type="hidden" name="id" value="{{ mot.ID }}">
+                <button type="submit">Supprimer</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
