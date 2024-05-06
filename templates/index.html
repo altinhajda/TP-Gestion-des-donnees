@@ -6,11 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulaire</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Montserrat+Alternates&family=Montserrat:wght@500&family=Sora:wght@100..800&display=swap"
+        rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: "Sora", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
             background-color: #f7f7f7;
             color: #333;
         }
@@ -34,7 +42,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin: 5px;
         }
 
         input[type="text"] {
@@ -59,39 +67,9 @@
             background-color: #0056b3;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            /* Change la direction en colonne */
-        }
-
-        .mot {
-            flex: 1;
-        }
-
-        .traduit {
-            color: green;
-        }
-
-        .actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-            align-self: flex-end;
-            /* Aligne les boutons sur la droite */
-        }
-
         .actions button {
-            padding: 8px 15px;
+            margin: 5px;
+            padding: 10px 20px 10px 10px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -123,29 +101,44 @@
     <div class="container">
         <h1>Liste de mots</h1>
         <form action="/add" method="post">
-            <input type="text" name="francais" placeholder="Ajouter un mot en franÃ§ais">
+            <input type="text" name="francais" placeholder="Ajouter un mot en français">
             <input type="submit" value="Ajouter">
         </form>
-        <ul>
-            {% for mot in mots %}
-            <li>
-                <span class="mot">{{ mot.Francais }}</span>
-                <span class="traduction{% if mot.Anglais %} traduit{% endif %}">{{ mot.Anglais or 'Pas encore traduit'
-                    }}</span>
-                <div class="actions">
-                    <form action="/translate" method="post">
-                        <input type="hidden" name="id" value="{{ mot.ID }}">
-                        <button type="submit" class="translate-btn" {% if mot.Anglais %} disabled{% endif %}><i
-                                class="fas fa-language"></i> Traduire</button>
-                    </form>
-                    <form action="/delete" method="post">
-                        <input type="hidden" name="id" value="{{ mot.ID }}">
-                        <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                    </form>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">Mot</th>
+                    <th class="text-center">Traduction</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mot in mots %}
+                <tr>
+                    <td class="align-middle text-center">{{ mot.Francais }}</td>
+                    <td class="align-middle text-center">
+                        <span class="traduction{% if mot.Anglais %} traduit{% endif %}">
+                            {{ mot.Anglais or 'Pas encore traduit' }}
+                        </span>
+                    </td>
+                    <td class="align-middle text-center actions">
+                        <form action="/translate" method="post">
+                            <input type="hidden" name="id" value="{{ mot.ID }}">
+                            <button type="submit" class="translate-btn" {% if mot.Anglais %} disabled{% endif %}>
+                                <i class="fas fa-language"></i> Traduire
+                            </button>
+                        </form>
+                        <form action="/delete" method="post">
+                            <input type="hidden" name="id" value="{{ mot.ID }}">
+                            <button type="submit" class="delete-btn">
+                                <i class="fas fa-trash-alt"></i> Supprimer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
 
