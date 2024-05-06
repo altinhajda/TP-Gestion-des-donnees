@@ -70,8 +70,8 @@
             padding: 15px;
             border-radius: 4px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            /* Change la direction en colonne */
         }
 
         .mot {
@@ -82,22 +82,16 @@
             color: green;
         }
 
-        .actions-container {
+        .actions {
+            margin-top: 10px;
             display: flex;
-            align-items: center;
-            margin-left: auto;
-        }
-
-        .actions-container form {
-            margin: 0;
-        }
-
-        .actions-container form:first-child {
-            margin-right: 10px;
+            gap: 10px;
+            align-self: flex-end;
+            /* Aligne les boutons sur la droite */
         }
 
         .actions button {
-            padding: 10px 20px;
+            padding: 8px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -129,7 +123,7 @@
     <div class="container">
         <h1>Liste de mots</h1>
         <form action="/add" method="post">
-            <input type="text" name="francais" placeholder="Ajouter un mot en français">
+            <input type="text" name="francais" placeholder="Ajouter un mot en franÃ§ais">
             <input type="submit" value="Ajouter">
         </form>
         <ul>
@@ -138,7 +132,7 @@
                 <span class="mot">{{ mot.Francais }}</span>
                 <span class="traduction{% if mot.Anglais %} traduit{% endif %}">{{ mot.Anglais or 'Pas encore traduit'
                     }}</span>
-                <div class="actions-container">
+                <div class="actions">
                     <form action="/translate" method="post">
                         <input type="hidden" name="id" value="{{ mot.ID }}">
                         <button type="submit" class="translate-btn" {% if mot.Anglais %} disabled{% endif %}><i
