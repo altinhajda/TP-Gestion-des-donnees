@@ -1,15 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulaire</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
+            text-align: center;
+            margin-bottom: 20px;
             color: #333;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 70%;
+            margin-right: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
         }
 
         ul {
@@ -18,9 +65,10 @@
         }
 
         li {
+            background-color: #f9f9f9;
             margin-bottom: 10px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 10px;
+            padding: 15px;
+            border-radius: 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -30,39 +78,72 @@
             flex: 1;
         }
 
-        .traduire-btn {
-            margin-left: 10px;
-        }
-
         .traduit {
             color: green;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions button:hover {
+            background-color: #ddd;
+        }
+
+        .translate-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .translate-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
         }
     </style>
 </head>
 
 <body>
-    <h1>Liste de mots</h1>
-    <form action="/add" method="post">
-        <input type="text" name="francais" placeholder="Ajouter un mot en français">
-        <button type="submit">Ajouter</button>
-    </form>
-    <ul>
-        {% for mot in mots %}
-        <li>
-            <span class="mot">{{ mot.Francais }}</span>
-            <span class="traduction{% if mot.Anglais %} traduit{% endif %}">{{ mot.Anglais or 'Pas encore traduit'
-                }}</span>
-            <form action="/translate" method="post" style="display: inline;">
-                <input type="hidden" name="id" value="{{ mot.ID }}">
-                <button type="submit" class="traduire-btn" {% if mot.Anglais %} disabled{% endif %}>Traduire</button>
-            </form>
-            <form action="/delete" method="post" style="display: inline;">
-                <input type="hidden" name="id" value="{{ mot.ID }}">
-                <button type="submit">Supprimer</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Liste de mots</h1>
+        <form action="/add" method="post">
+            <input type="text" name="francais" placeholder="Ajouter un mot en franÃ§ais">
+            <input type="submit" value="Ajouter">
+        </form>
+        <ul>
+            {% for mot in mots %}
+            <li>
+                <span class="mot">{{ mot.Francais }}</span>
+                <span class="traduction{% if mot.Anglais %} traduit{% endif %}">{{ mot.Anglais or 'Pas encore traduit'
+                    }}</span>
+                <div class="actions">
+                    <form action="/translate" method="post">
+                        <input type="hidden" name="id" value="{{ mot.ID }}">
+                        <button type="submit" class="translate-btn" {% if mot.Anglais %} disabled{% endif %}><i
+                                class="fas fa-language"></i> Traduire</button>
+                    </form>
+                    <form action="/delete" method="post">
+                        <input type="hidden" name="id" value="{{ mot.ID }}">
+                        <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i> Supprimer</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 
 </html>
